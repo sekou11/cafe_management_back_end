@@ -8,4 +8,6 @@ public interface UserService {
 
 	public ResponseEntity<String> signup(Map<String, String> requestMap);
 
+	public ResponseEntity<String> login(Map<String, String> requestMap);
+
 }

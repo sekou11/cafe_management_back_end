@@ -13,7 +13,7 @@ import cafe_management.rest.UserRest;
 import cafe_management.service.UserService;
 
 @RestController
-public class UserRestImpl implements UserRest {
+public abstract class UserRestImpl implements UserRest {
 	@Autowired
   private UserService userService;
 	@Override
@@ -21,6 +21,18 @@ public class UserRestImpl implements UserRest {
 		try {
 			return userService.signup(requestMap);
 		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	@Override
+	public ResponseEntity<String> login(Map<String, String> requestMap) {
+		try {
+			return userService.login(requestMap);
+		} catch (Exception ex) {
+			
 			ex.printStackTrace();
 		}
 		return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);

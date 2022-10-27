@@ -67,4 +67,12 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
+	@Override
+	public ResponseEntity<String> login(Map<String, String> requestMap) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
 }
