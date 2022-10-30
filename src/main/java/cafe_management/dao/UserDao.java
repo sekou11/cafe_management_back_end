@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import cafe_management.pojo.User;
 
 public interface UserDao extends JpaRepository<User, Integer> {
-	
-	public User findByEmailId(@Param ("email")String email);
+
+	public User findByEmailId(@Param("email") String email);
 
 }

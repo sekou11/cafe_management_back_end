@@ -8,34 +8,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import cafe_management.Utils.CafeUtils;
-import cafe_management.constants.CafeConstants;
-import cafe_management.rest.UserRest;
-import cafe_management.service.UserService;
-
+import cafe_management.constant.CafeConstant;
+import cafe_management.rest.CafeRest;
+import cafe_management.service.CafeService;
 @RestController
-public abstract class UserRestImpl implements UserRest {
-	@Autowired
-  private UserService userService;
+public class CafeRestimpl implements CafeRest {
+	 @Autowired
+   private CafeService cafeService;
 	@Override
 	public ResponseEntity<String> signup(Map<String, String> requestMap) {
 		try {
-			return userService.signup(requestMap);
+			return cafeService.signup(requestMap);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+		return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
-	
 	@Override
 	public ResponseEntity<String> login(Map<String, String> requestMap) {
+		
 		try {
-			return userService.login(requestMap);
+			return cafeService.login(requestMap);
 		} catch (Exception ex) {
-			
 			ex.printStackTrace();
 		}
-		return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+		return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

@@ -1,10 +1,6 @@
 package cafe_management.jwt;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-public class PlaintextPasswordEncoder implements PasswordEncoder {
-
-	
+public class PlaintextPasswordEncoder  implements PasswordEncoder{
 	@Override
 	public String encode(CharSequence rawPassword) {
 		
@@ -24,5 +20,4 @@ public class PlaintextPasswordEncoder implements PasswordEncoder {
 	private  PlaintextPasswordEncoder() {
 		
 	}
-
 }

@@ -17,58 +17,52 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
 @Component
-public class JwtFilter extends OncePerRequestFilter{
-    @Autowired
-	private JwtUtils jwtUtils;
-	
+public class JwtFilter extends OncePerRequestFilter {
 	@Autowired
-	
 	private CustomerUserDetailsService service;
-	
-    Claims claims = null;
-	String userName = null;
-	
-	
-	
+	@Autowired
+	private JwtUtil jwtUtil;
+	Claims claims =null;
+	private String userName=null;
 	@Override
-	protected void doFilterInternal(HttpServletRequest httpServletRequestt, HttpServletResponse httpServletResponse, FilterChain filterChain)
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		if (httpServletRequestt.getServletPath().matches("/user/login/user/forgotPassword/user/signUp")) {
-			filterChain.doFilter(httpServletRequestt, httpServletResponse);
-		}
-		else {
-		   String authorizationHeader =httpServletRequestt.getHeader("Authorization");	
-		   String token = null;
-		    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-				token =authorizationHeader.substring(7);
-				userName = jwtUtils.extractUserName(token);
-				claims = jwtUtils.extractAllClaims(token);
+		if (request.getServletPath().matches("/user/login/user/forgotPassword/usr/signup")) {
+			 filterChain.doFilter(request, response);
+		}else {
+			String authorizationHeader = request.getHeader("Authorization");
+			String token =null; 
+			  if (authorizationHeader !=null && authorizationHeader.startsWith("Bearer ")) {
+				   token = authorizationHeader.substring(7);
+				   userName =jwtUtil.extractUsername(token);
+				   claims =jwtUtil.extractAllClaims(token);
 			}
-		     if (userName != null && SecurityContextHolder.getContext().getAuthentication()==null) {
+			  if (userName!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
 				UserDetails userDetails = service.loadUserByUsername(userName);
-				  if (jwtUtils.validateToken(token, userDetails)) {
+				 if (jwtUtil.validateToken(token, userDetails)) {
 					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = 
 							new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
-					usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequestt));
+					usernamePasswordAuthenticationToken.setDetails(
+							new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 				}
 			}
-		     filterChain.doFilter(httpServletRequestt, httpServletResponse);
+			  filterChain.doFilter(request, response);
 		}
 		
-		}
-	
+		
+}
 	public boolean isAdmin() {
-		return "admin".equalsIgnoreCase((String ) claims.get("role"));
+		return "admin".equalsIgnoreCase((String) claims.get("role"));
 	}
-	
-	public boolean isUser() {
-		return "user".equalsIgnoreCase((String ) claims.get("role"));
+	public boolean isAUser() {
+		return "user".equalsIgnoreCase((String) claims.get("role"));
 	}
 	
 	public String getCurrentUser() {
 		return userName;
 	}
-
+	
+	
 }
