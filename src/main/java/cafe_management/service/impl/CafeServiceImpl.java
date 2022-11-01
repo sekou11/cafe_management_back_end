@@ -1,5 +1,7 @@
 package cafe_management.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -21,6 +23,7 @@ import cafe_management.jwt.JwtFilter;
 import cafe_management.jwt.JwtUtil;
 import cafe_management.pojo.User;
 import cafe_management.service.CafeService;
+import cafe_management.wrapper.UserWrapper;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
@@ -101,5 +104,19 @@ public class CafeServiceImpl implements CafeService {
 		   return new ResponseEntity<String>("{\"message\":\""+"Bad Credentials."+"\"}",
 					HttpStatus.BAD_REQUEST);
 	}
+
+	@Override
+	public ResponseEntity<List<UserWrapper>> getAllUsers() {
+		try {
+			if (jwtFilter.isAdmin()) {
+				return new ResponseEntity<>(new ArrayList<>(userDao.getAllUser()),HttpStatus.OK);
+			}else {
+				return new ResponseEntity<>(new ArrayList<>(),HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return new ResponseEntity<>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
+	}  
 
 }
