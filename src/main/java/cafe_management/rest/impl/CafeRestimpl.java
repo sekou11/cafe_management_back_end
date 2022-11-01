@@ -48,4 +48,13 @@ public class CafeRestimpl implements CafeRest {
 		return new ResponseEntity<List<UserWrapper>>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
 
 }
+	@Override
+	public ResponseEntity<String> update(Map<String, String> requestMap) {
+	try {
+		return cafeService.update(requestMap);
+	} catch (Exception ex) {
+		ex.printStackTrace();
+	}
+	return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

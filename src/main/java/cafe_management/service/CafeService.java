@@ -15,4 +15,6 @@ public interface CafeService {
 
 	ResponseEntity<List<UserWrapper>> getAllUsers();
 
+	ResponseEntity<String> update(Map<String, String> requestMap);
+
 }

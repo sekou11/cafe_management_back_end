@@ -21,6 +21,14 @@ import lombok.Data;
 @NamedQuery( name="User.getAllUser",
 query="SELECT new cafe_management.wrapper.UserWrapper(u.id,u.name,u.email,u.contactNumber,u.status) FROM User u WHERE u.role ='user'"
 )
+
+@NamedQuery(name = "User.updateStatus" ,
+           query ="UPDATE User u "
+           		+ "SET u.status=:status"
+           		+ " WHERE u.id=:id" )
+
+
+
 @Entity
 @DynamicUpdate
 @DynamicInsert

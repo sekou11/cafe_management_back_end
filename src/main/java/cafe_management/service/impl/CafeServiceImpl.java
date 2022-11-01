@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -117,6 +118,26 @@ public class CafeServiceImpl implements CafeService {
 			ex.printStackTrace();
 		}
 		return new ResponseEntity<>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@Override
+	public ResponseEntity<String> update(Map<String, String> requestMap) {
+		try {
+			  if (jwtFilter.isAdmin()) {
+				 Optional<User> optional = userDao.findById(Integer.parseInt(requestMap.get("id")));
+				    if (!optional.isEmpty()) {
+						userDao.updateStatus(requestMap.get("status"),Integer.parseInt(requestMap.get("id")));
+						return new ResponseEntity<String>("User Status Updated successfuly",HttpStatus.OK);
+					} else {
+                      return new ResponseEntity<String>("User id does not exist",HttpStatus.NOT_FOUND);
+					}
+			} else {
+				 return CafeUtils.getResponse(CafeConstant.UNAUTHORIZED_ACCES, HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		 return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 	}  
 
 }
