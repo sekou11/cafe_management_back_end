@@ -154,6 +154,35 @@ public class CafeServiceImpl implements CafeService {
 			emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(), "Account Disabled",
 					"User:-" +user+ "\n is approved by \n Admin:-"+jwtFilter.getCurrentUser(),  allAdmin);
 		}
-	}  
+	}
+
+	@Override
+	public ResponseEntity<String> checkToken() {
+		
+		 return CafeUtils.getResponse("true",HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+		  try {
+			   User userObj = userDao.findByEmail(jwtFilter.getCurrentUser());
+			     if (!userObj.equals(null)) {
+					 if (userObj.getPassword().equals(requestMap.get("oldPassword"))) {
+						userObj.setPassword(requestMap.get("newPassword"));
+						userDao.save(userObj);
+						return  CafeUtils.getResponse("Password updated sucessfuly", HttpStatus.OK);
+					}
+					 return CafeUtils.getResponse("Incorrect Old Password", HttpStatus.BAD_REQUEST);
+				} else {
+					return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			  
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	
 
 }
