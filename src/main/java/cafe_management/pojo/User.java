@@ -14,18 +14,14 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import lombok.Data;
-@NamedQuery( name="User.findByEmailId",
-             query="SELECT u FROM User u WHERE u.email =:email"
-             )
-//select all a user who role=user
-@NamedQuery( name="User.getAllUser",
-query="SELECT new cafe_management.wrapper.UserWrapper(u.id,u.name,u.email,u.contactNumber,u.status) FROM User u WHERE u.role ='user'"
-)
+@NamedQuery(name="User.findByEmailId",query="SELECT u FROM User u WHERE u.email =:email")
 
-@NamedQuery(name = "User.updateStatus" ,
-           query ="UPDATE User u "
-           		+ "SET u.status=:status"
-           		+ " WHERE u.id=:id" )
+//select all a user who role=user
+@NamedQuery( name="User.getAllUser",query="SELECT new cafe_management.wrapper.UserWrapper(u.id,u.name,u.email,u.contactNumber,u.status) FROM User u WHERE u.role ='user'")
+
+@NamedQuery( name="User.getAllAdmin",query="SELECT u.email FROM User u WHERE u.role ='admin'")
+
+@NamedQuery(name = "User.updateStatus" ,query ="UPDATE User u SET u.status=:status WHERE u.id=:id" )
 
 
 

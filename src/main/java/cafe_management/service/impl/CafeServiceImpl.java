@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Service;
 
 import cafe_management.Utils.CafeUtils;
+import cafe_management.Utils.EmailUtils;
 import cafe_management.constant.CafeConstant;
 import cafe_management.dao.UserDao;
 import cafe_management.jwt.CustomerUserDetailsService;
@@ -39,6 +40,8 @@ public class CafeServiceImpl implements CafeService {
          JwtFilter jwtFilter;
          @Autowired
          JwtUtil JwtUtil;
+         @Autowired
+         EmailUtils emailUtils;
 	 
 	@Override
 	public ResponseEntity<String> signup(Map<String, String> requestMap) {
@@ -127,6 +130,7 @@ public class CafeServiceImpl implements CafeService {
 				 Optional<User> optional = userDao.findById(Integer.parseInt(requestMap.get("id")));
 				    if (!optional.isEmpty()) {
 						userDao.updateStatus(requestMap.get("status"),Integer.parseInt(requestMap.get("id")));
+						sendMailToAllAdmin(requestMap.get("status"),optional.get().getEmail(),userDao.getAllAdmin());
 						return new ResponseEntity<String>("User Status Updated successfuly",HttpStatus.OK);
 					} else {
                       return new ResponseEntity<String>("User id does not exist",HttpStatus.NOT_FOUND);
@@ -138,6 +142,18 @@ public class CafeServiceImpl implements CafeService {
 			ex.printStackTrace();
 		}
 		 return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	private void sendMailToAllAdmin(String status, String user, List<String> allAdmin) {
+		
+		allAdmin.remove(jwtFilter.getCurrentUser());
+		if (status!=null && status.equalsIgnoreCase("true")) {
+			emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(), "Account Approved",
+					"User:-" +user+ "\n is approved by \n Admin:-"+jwtFilter.getCurrentUser(),  allAdmin);
+		} else {
+			emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(), "Account Disabled",
+					"User:-" +user+ "\n is approved by \n Admin:-"+jwtFilter.getCurrentUser(),  allAdmin);
+		}
 	}  
 
 }
