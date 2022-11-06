@@ -1,5 +1,7 @@
 package cafe_management.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import cafe_management.jwt.JwtFilter;
 import cafe_management.pojo.Category;
 import cafe_management.pojo.Product;
 import cafe_management.service.ProductService;
+import cafe_management.wrapper.ProductWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -70,6 +73,15 @@ public class ProdcutServiceImpl implements ProductService {
 			}
 		}
 		return false;
+	}
+	@Override
+	public ResponseEntity<List<ProductWrapper>> getAllProduct() {
+	   try {
+		 return new ResponseEntity<> (productDao.getAllProduct() ,HttpStatus.OK);
+	} catch (Exception ex) {
+		ex.printStackTrace();
+	}
+		return new ResponseEntity<List<ProductWrapper>>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
