@@ -3,6 +3,7 @@ package cafe_management.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,6 +83,32 @@ public class ProdcutServiceImpl implements ProductService {
 		ex.printStackTrace();
 	}
 		return new ResponseEntity<List<ProductWrapper>>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	@Override
+	public ResponseEntity<String> update(Map<String, String> requestMap) {
+		  try {
+			  if (jwtFilter.isAdmin()) {
+				   if (validateProductMap(requestMap, true)) {
+					 Optional<Product> optional = productDao.findById(Integer.parseInt( requestMap.get("id")));
+					    if (!optional.isEmpty()) {
+							Product p = getProductFromMap(requestMap, true);
+							p.setStatus(optional.get().getStatus());
+							productDao.save(p);
+							return CafeUtils.getResponse("Product Updated Successfully", HttpStatus.OK);
+						} else {
+							return CafeUtils.getResponse("Product Id Not Found...", HttpStatus.NOT_FOUND);
+						}
+				} else {
+					return CafeUtils.getResponse(CafeConstant.INVALID_DATA, HttpStatus.BAD_REQUEST);
+				}
+				
+			}else {
+				return CafeUtils.getResponse(CafeConstant.UNAUTHORIZED_ACCES, HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		  return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

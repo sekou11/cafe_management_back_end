@@ -13,4 +13,6 @@ public interface ProductService {
 
 	public ResponseEntity<List<ProductWrapper>> getAllProduct();
 
+	public ResponseEntity<String> update(Map<String, String> requestMap);
+
 }

@@ -19,4 +19,7 @@ public interface ProductRest {
 	
 	@GetMapping(path="/get")
 	public ResponseEntity<List<ProductWrapper>>getAllProduct();
+	
+	@PostMapping(path="/update")
+	public ResponseEntity<String>update(@RequestBody Map<String, String>requestMap);
 }
