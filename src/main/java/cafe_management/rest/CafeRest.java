@@ -31,4 +31,8 @@ public interface CafeRest {
 	 
 	 @PostMapping(path = "/changePassword")
 	 public ResponseEntity<String>changePassword(@RequestBody(required = true)Map<String, String>requestMap);
+	 
+	 @PostMapping(path = "/forgotPassword")
+	 public ResponseEntity<String>forgotPassword(@RequestBody(required = true)Map<String, String>requestMap);
+	 
 }

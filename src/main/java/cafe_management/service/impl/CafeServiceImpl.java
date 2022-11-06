@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import cafe_management.Utils.CafeUtils;
 import cafe_management.Utils.EmailUtils;
 import cafe_management.constant.CafeConstant;
@@ -175,7 +177,22 @@ public class CafeServiceImpl implements CafeService {
 					 return CafeUtils.getResponse("Incorrect Old Password", HttpStatus.BAD_REQUEST);
 				} else {
 					return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
-				}
+				}  
+			  
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@Override
+	public ResponseEntity<String> forgotPassword(Map<String, String> requestMap) {
+		try {
+			User user=  userDao.findByEmail(requestMap.get("eamil"));
+			   if (!Objects.isNull(user) && !Strings.isNullOrEmpty(user.getEmail())) 
+				  emailUtils.forgotMail(user.getEmail(), "Credentials By Cafe Management System", user.getPassword());
+			   
+			return CafeUtils.getResponse("Ckeck Your mail For Credenials", HttpStatus.OK);
 			  
 		} catch (Exception ex) {
 			ex.printStackTrace();
