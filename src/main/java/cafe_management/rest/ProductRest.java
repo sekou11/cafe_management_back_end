@@ -32,4 +32,7 @@ public interface ProductRest {
 	 
 	   @GetMapping(path="/getCategory/{id}")
 	 public ResponseEntity<List<ProductWrapper>>getByCategory(@PathVariable Integer id);
+	   
+	   @GetMapping(path="/getProductById/{id}")
+		 public ResponseEntity<ProductWrapper>getProductById(@PathVariable Integer id);
 }

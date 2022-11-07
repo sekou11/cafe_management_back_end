@@ -159,5 +159,14 @@ public class ProdcutServiceImpl implements ProductService {
 		}
 		return new ResponseEntity<List<ProductWrapper>>(new ArrayList<>(),HttpStatus.INTERNAL_SERVER_ERROR );
 	}
+	@Override
+	public ResponseEntity<ProductWrapper> getProductById(Integer id) {
+		  try {
+			return new ResponseEntity<ProductWrapper>(productDao.getProductById(id),HttpStatus.OK);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return new ResponseEntity<ProductWrapper>(new ProductWrapper(),HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }

@@ -28,6 +28,9 @@ import lombok.Data;
 query = "SELECT new cafe_management.wrapper.ProductWrapper(p.id,p.name) FROM Product p WHERE p.category.id=:id AND p.status='true' "
 		)
 
+@NamedQuery(name = "Product.getProductById",
+query = "SELECT new cafe_management.wrapper.ProductWrapper(p.id,p.name,p.description,p.price) FROM Product p WHERE p.id=:id")
+
 @Entity
 @DynamicUpdate
 @DynamicInsert
