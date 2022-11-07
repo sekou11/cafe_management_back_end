@@ -129,5 +129,26 @@ public class ProdcutServiceImpl implements ProductService {
 		}
 		return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	@Override
+	public ResponseEntity<String> updateStatus(Map<String, String> requestMap) {
+		  try {
+			 if (jwtFilter.isAdmin()) {
+				 Optional<Product> optional = productDao.findById(Integer.parseInt(requestMap.get("id")));
+				   if (!optional.isEmpty()) {
+					productDao.updateStatus(Integer.parseInt(requestMap.get("id")),requestMap.get("status"));
+					return CafeUtils.getResponse("Product status Updated Successfuly", HttpStatus.OK);
+					
+				} else {
+					return CafeUtils.getResponse("Product Id Not Found", HttpStatus.NOT_FOUND);
+				}
+			} else {
+				return CafeUtils.getResponse(CafeConstant.UNAUTHORIZED_ACCES, HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }
