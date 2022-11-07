@@ -110,5 +110,24 @@ public class ProdcutServiceImpl implements ProductService {
 		}
 		  return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	@Override
+	public ResponseEntity<String> deleteProduct(Integer id) {
+		  try {
+			  if (jwtFilter.isAdmin()) {
+				 Optional<Product> optional = productDao.findById(id);
+				   if (!optional.isEmpty()) {
+					productDao.deleteById(id);
+					return CafeUtils.getResponse("Product deleted Successfuly", HttpStatus.OK);
+				} else {
+					return CafeUtils.getResponse("Product id Not Found", HttpStatus.NOT_FOUND);
+				}
+			}else {
+				return CafeUtils.getResponse(CafeConstant.UNAUTHORIZED_ACCES, HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }

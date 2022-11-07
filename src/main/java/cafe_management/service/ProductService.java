@@ -15,4 +15,6 @@ public interface ProductService {
 
 	public ResponseEntity<String> update(Map<String, String> requestMap);
 
+	public ResponseEntity<String> deleteProduct(Integer id);
+
 }
