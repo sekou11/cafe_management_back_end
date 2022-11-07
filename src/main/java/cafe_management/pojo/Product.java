@@ -22,8 +22,11 @@ import lombok.Data;
  query = "SELECT new cafe_management.wrapper.ProductWrapper(p.id,p.name,p.description,p.price,p.status,p.category.id,p.category.name) FROM Product p"
 		)
 
-@NamedQuery(name = "Product.updateStatus" ,
-   query=" UPDATE Product p SET p.status=:status  WHERE p.id=:id ")
+@NamedQuery(name = "Product.updateStatus" ,query=" UPDATE Product p SET p.status=:status  WHERE p.id=:id ")
+
+@NamedQuery(name="Product.getProductByCategory",
+query = "SELECT new cafe_management.wrapper.ProductWrapper(p.id,p.name) FROM Product p WHERE p.category.id=:id AND p.status='true' "
+		)
 
 @Entity
 @DynamicUpdate

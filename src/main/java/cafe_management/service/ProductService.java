@@ -19,4 +19,6 @@ public interface ProductService {
 
 	public ResponseEntity<String> updateStatus(Map<String, String> requestMap);
 
+	public ResponseEntity<List<ProductWrapper>> getByCategory(Integer id);
+
 }
