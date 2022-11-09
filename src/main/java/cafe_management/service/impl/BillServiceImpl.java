@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.apache.el.lang.ELArithmetic;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -227,6 +228,22 @@ public class BillServiceImpl implements BillService {
 		     targetStream.close();
 		     
 		return byteArray;
+	}
+
+	@Override
+	public ResponseEntity<String> delete(Integer id) {
+		  try {
+			  Optional<Bill> optional = billDao.findById(id);
+			   if (!optional.isEmpty()) {
+				billDao.deleteById(id);
+				return CafeUtils.getResponse(" Bill N ° " + id + " deleted Sucessfuly"	, HttpStatus.OK);
+			}
+			   return CafeUtils.getResponse("Bill Id Not Found.."	, HttpStatus.NOT_FOUND);
+			   
+		} catch (Exception ex) {
+			 ex.printStackTrace();
+		}
+		  return CafeUtils.getResponse(CafeConstant.SOMETHING_WENT_WRONG	, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
