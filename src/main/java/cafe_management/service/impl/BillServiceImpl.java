@@ -1,6 +1,8 @@
 package cafe_management.service.impl;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.apache.el.lang.ELArithmetic;
@@ -56,7 +58,7 @@ public class BillServiceImpl implements BillService {
 				String data = "Name : " + requestMap.get("name") + "\n" + " Contact Number : "
 						+ requestMap.get("cantactNumber") + "\n " + " Email : " + requestMap.get("email") + "\n "
 						+ " Payment Method : " + requestMap.get("paymentMethod") + "\n" + " Total Amount : "
-						+ requestMap.get("totalAmount") + "\n" + " ProductDetails : "
+						+ requestMap.get("total") + "\n" + " ProductDetails : "
 						+ requestMap.get("productDetails") + "\n" + " CreatedBy : " + requestMap.get("createdBy")
 						+ "\n";
 				Document document = new Document();
@@ -69,7 +71,7 @@ public class BillServiceImpl implements BillService {
 				chunk.setAlignment(Element.ALIGN_CENTER);
 				document.add(chunk);
 
-				Paragraph p = new Paragraph(data + "\n \n", getFont("Data"));
+				Paragraph p = new Paragraph(data + "\n \n", getFont("data"));
 				document.add(p);
 
 				PdfPTable table = new PdfPTable(5);
@@ -176,6 +178,18 @@ public class BillServiceImpl implements BillService {
 				&& requestMap.containsKey("totalAmount") && requestMap.containsKey("productDetails")
 
 		;
+	}
+
+	@Override
+	public ResponseEntity<List<Bill>> getBills() {
+		      List<Bill>list = new ArrayList<Bill>();
+		       if (jwtFilter.isAdmin()) {
+				 list = billDao.getAllBills();
+			} else {
+             list = billDao.billByUserName(jwtFilter.getCurrentUser());
+			}
+		       return new ResponseEntity<List<Bill>>(list ,HttpStatus.OK);
+	     
 	}
 
 }
